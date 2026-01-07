@@ -3,7 +3,7 @@ const AccessoryCarbonFilter = require('../models/AccessoryCarbonFilter');
 
 const models = {
   'sand-filter': AccessorySandFilter,
-  'carbon-filter': AccessoryCarbonFilter
+  'carbon-filter': AccessoryCarbonFilter  
 };
 
 const getProducts = async (req, res) => {
