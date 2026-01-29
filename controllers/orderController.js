@@ -178,7 +178,7 @@ const downloadInvoice = async (req, res) => {
         <div class="invoice-container">
             <div class="header">
                 <div class="logo">
-                    <img src="data:image/png;base64,${fs.readFileSync(path.join(__dirname, 'assets/logo.png')).toString('base64')}" alt="ST Logo" style="width: 120px; height: 80px; margin-right: 15px;" />
+                    <img src="data:image/png;base64,${fs.readFileSync(path.join(__dirname, '../../client/src/assets/logo.png')).toString('base64')}" alt="ST Logo" style="width: 120px; height: 80px; margin-right: 15px;" />
                     <div class="company-name" style="color: #0c0c0cff;">Shivarn Technologies</div>
                 </div>
                 <div class="invoice-date">
