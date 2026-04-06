@@ -1,24 +1,10 @@
 const SoftenerSpares = require('../models/SoftenerSpares');
 
-// Get all softener spares with pagination
+// Get all softener spares
 const getAllSoftenerSpares = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    const total = await SoftenerSpares.countDocuments();
-    const softenerSpares = await SoftenerSpares.find()
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    res.json({
-      softenerSpares,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
-      total
-    });
+    const softenerSpares = await SoftenerSpares.find().sort({ createdAt: -1 });
+    res.json({ softenerSpares, total: softenerSpares.length });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
