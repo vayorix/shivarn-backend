@@ -2,22 +2,8 @@ const Pumps = require('../models/Pumps');
 
 const getPumps = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    const totalPumps = await Pumps.countDocuments();
-    const pumps = await Pumps.find()
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    res.json({
-      pumps,
-      currentPage: page,
-      totalPages: Math.ceil(totalPumps / limit),
-      totalPumps
-    });
+    const pumps = await Pumps.find().sort({ createdAt: -1 });
+    res.json({ pumps, totalPumps: pumps.length });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

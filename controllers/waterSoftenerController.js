@@ -1,24 +1,10 @@
 const WaterSoftener = require('../models/WaterSoftener');
 
-// Get all water softeners with pagination
+// Get all water softeners
 const getAllWaterSofteners = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    const total = await WaterSoftener.countDocuments();
-    const waterSofteners = await WaterSoftener.find()
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    res.json({
-      waterSofteners,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
-      total
-    });
+    const waterSofteners = await WaterSoftener.find().sort({ createdAt: -1 });
+    res.json({ waterSofteners, total: waterSofteners.length });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

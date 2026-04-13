@@ -12,22 +12,8 @@ const DomesticOthers = require('../models/DomesticOthers');
 const createController = (Model, modelName) => ({
   getAll: async (req, res) => {
     try {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
-      const skip = (page - 1) * limit;
-
-      const total = await Model.countDocuments();
-      const items = await Model.find()
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
-
-      res.json({
-        items,
-        totalPages: Math.ceil(total / limit),
-        currentPage: page,
-        total
-      });
+      const items = await Model.find().sort({ createdAt: -1 });
+      res.json({ items, total: items.length });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

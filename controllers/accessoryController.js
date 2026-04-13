@@ -15,22 +15,8 @@ const getProducts = async (req, res) => {
       return res.status(400).json({ message: 'Invalid product type' });
     }
 
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    const totalProducts = await Model.countDocuments();
-    const products = await Model.find()
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    res.json({
-      products,
-      currentPage: page,
-      totalPages: Math.ceil(totalProducts / limit),
-      totalProducts
-    });
+    const products = await Model.find().sort({ createdAt: -1 });
+    res.json({ products, totalProducts: products.length });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
