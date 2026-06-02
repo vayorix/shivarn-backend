@@ -5,8 +5,8 @@ const Order = require('../models/Order');
 
 
 // PhonePe Configuration
-const clientId = process.env.PHONEPE_CLIENT_ID;
-const clientSecret = process.env.PHONEPE_CLIENT_SECRET;
+const clientId = process.env.PHONEPE_CLIENT_ID || "SU2604171224483256279711";
+const clientSecret = process.env.PHONEPE_CLIENT_SECRET || "b017d1c0-2b6f-497c-9d31-c6317afd262e";
 const clientVersion = 1;
 const env = Env.PRODUCTION;
 

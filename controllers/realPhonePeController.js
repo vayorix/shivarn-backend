@@ -15,7 +15,7 @@ const createPhonePePayment = async (req, res) => {
       merchantTransactionId,
       merchantUserId,
       amount: amount, // Amount in paise
-      redirectUrl: `${process.env.PHONEPE_REDIRECT_URL}?id=${merchantTransactionId}`,
+      redirectUrl: `${process.env.PHONEPE_REDIRECT_URL || 'https://shivarn.in//payment-success'}?id=${merchantTransactionId}`,
       redirectMode: 'POST',
       callbackUrl: process.env.PHONEPE_CALLBACK_URL,
       paymentInstrument: {

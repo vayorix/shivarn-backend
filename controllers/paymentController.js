@@ -3,8 +3,8 @@ const { randomUUID } = require('crypto');
 const Order = require('../models/Order');
 
 // PhonePe Configuration
-const clientId = process.env.PHONEPE_CLIENT_ID || "shivarntechnologies";
-const clientSecret = process.env.PHONEPE_CLIENT_SECRET || "PShivarn9868";
+const clientId = process.env.PHONEPE_CLIENT_ID || "SU2604171224483256279711";
+const clientSecret = process.env.PHONEPE_CLIENT_SECRET || "b017d1c0-2b6f-497c-9d31-c6317afd262e";
 const clientVersion = 1;
 const env = Env.SANDBOX;
 
@@ -26,7 +26,7 @@ const createCheckoutSession = async (req, res) => {
     console.log('Received Payload:', req.body);
 
     const merchantOrderId = randomUUID();
-    const redirectUrl = process.env.PHONEPE_REDIRECT_URL || 'https://shivarn.in//payment-successhttp://localhost:3000/redirect';
+    const redirectUrl = process.env.PHONEPE_REDIRECT_URL || 'https://shivarn.in//payment-success';
 
     const request = StandardCheckoutPayRequest.builder()
       .merchantOrderId(merchantOrderId)
@@ -81,8 +81,8 @@ const handleCallback = async (req, res) => {
 
     const authorizationHeader = req.headers['authorization'];
     const responseBody = JSON.stringify(req.body);
-    const username = process.env.PHONEPE_MERCHANT_USERNAME;
-    const password = process.env.PHONEPE_MERCHANT_PASSWORD;
+    const username = process.env.PHONEPE_MERCHANT_USERNAME || 'shivarntechnologies';
+    const password = process.env.PHONEPE_MERCHANT_PASSWORD || 'PShivarn9868';
 
     if (!username || !password) {
       console.error('Missing credentials in .env');
