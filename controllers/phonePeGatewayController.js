@@ -13,7 +13,7 @@ const createPhonePeGateway = async (req, res) => {
     
     // PhonePe Payment Request with your credentials
     const paymentData = {
-      merchantId: "TEST-M22NTDRP8I0P4_25051",
+      merchantId: "shivarntechnologies",
       merchantTransactionId,
       merchantUserId,
       amount: amount,
@@ -30,7 +30,7 @@ const createPhonePeGateway = async (req, res) => {
     
     // Create checksum with your salt key
     const keyIndex = 1;
-    const saltKey = "MTRmNWFkMTQtOTRjZS00NDI0LWJhM2QtMDA1ZWM2N2JlY2Zm";
+    const saltKey = "PShivarn9868";
     const string = payload + '/pg/v1/pay' + saltKey;
     const sha256 = crypto.createHash('sha256').update(string).digest('hex');
     const checksum = sha256 + '###' + keyIndex;

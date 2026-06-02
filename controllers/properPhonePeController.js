@@ -2,11 +2,13 @@ const { StandardCheckoutClient, Env, StandardCheckoutPayRequest } = require('pg-
 const { randomUUID } = require('crypto');
 const Order = require('../models/Order');
 
+
+
 // PhonePe Configuration
 const clientId = process.env.PHONEPE_CLIENT_ID;
 const clientSecret = process.env.PHONEPE_CLIENT_SECRET;
 const clientVersion = 1;
-const env = Env.SANDBOX;
+const env = Env.PRODUCTION;
 
 if (!clientId || !clientSecret) {
   console.error('Error: PHONEPE_CLIENT_ID or PHONEPE_CLIENT_SECRET is not defined');
