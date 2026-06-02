@@ -3,8 +3,8 @@ const { randomUUID } = require('crypto');
 const Order = require('../models/Order');
 
 // PhonePe Configuration
-const clientId = process.env.PHONEPE_CLIENT_ID || "SU2604171224483256279711";
-const clientSecret = process.env.PHONEPE_CLIENT_SECRET || "b017d1c0-2b6f-497c-9d31-c6317afd262e";
+const clientId = process.env.PHONEPE_CLIENT_ID || "M22NTDRP8I0P4_2604011009";
+const clientSecret = process.env.PHONEPE_CLIENT_SECRET || "ZTRhMjJkNmYtNGQ2MC00YWRmLTkwMTMtMTAwMDUzMmMwMTcx";
 const clientVersion = 1;
 const env = Env.SANDBOX;
 
