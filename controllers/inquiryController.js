@@ -120,30 +120,121 @@ const handlePaymentSuccess = async (req, res) => {
       
       // Customer email
       const customerEmailResult = await transporter.sendMail({
-        from: process.env.MAIL_FROM_ADDRESS,
+        from: `"${process.env.MAIL_FROM_NAME || 'Shivarn Technologies'}" <${process.env.MAIL_FROM_ADDRESS}>`,
         to: order.email,
-        subject: `Order Confirmation - ${order.orderId}`,
+        subject: `Order Confirmation - ${order.orderId} | Shivarn Technologies`,
         html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h1 style="color: #28a745;">🎉 Payment Successful!</h1>
-            <p>Dear ${order.name},</p>
-            <p>Your order has been confirmed successfully!</p>
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
-              <h3>Order Details:</h3>
-              <p><strong>Order ID:</strong> ${order.orderId}</p>
-              <p><strong>Amount:</strong> ₹${order.totalAmount.toLocaleString()}</p>
-              <p><strong>Status:</strong> <span style="color: #28a745;">COMPLETED</span></p>
-            </div>
-            <p>Thank you for choosing Shivarn Technologies!</p>
-            <p>Contact: (+91) 99780 70593</p>
-          </div>
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Order Confirmation</title>
+          </head>
+          <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f6f9; padding: 30px 0;">
+              <tr>
+                <td align="center">
+                  <table width="600" cellpadding="0" cellspacing="0" style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12);">
+                    
+                    <!-- Header -->
+                    <tr>
+                      <td style="background: linear-gradient(135deg, #0056b3 0%, #00b7ff 100%); padding: 35px 30px; text-align: center;">
+                        <h1 style="color: white; margin: 0; font-size: 28px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">🎉 Order Confirmed!</h1>
+                        <p style="color: white; margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Thank you for your order, ${order.name}!</p>
+                      </td>
+                    </tr>
+                    
+                    <!-- Status Banner -->
+                    <tr>
+                      <td style="background: linear-gradient(90deg, #28a745, #20c997); padding: 15px 30px; text-align: center; color: white; font-weight: 600; font-size: 16px;">
+                        Payment Status: COMPLETED (₹${order.totalAmount.toLocaleString('en-IN')})
+                      </td>
+                    </tr>
+                    
+                    <!-- Body Content -->
+                    <tr>
+                      <td style="padding: 30px;">
+                        <p style="color: #495057; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                          We are pleased to inform you that your payment was successful and your order has been received. Our team will start processing your order immediately.
+                        </p>
+                        
+                        <!-- Order Info -->
+                        <h3 style="color: #2c3e50; margin: 25px 0 15px 0; font-size: 18px; font-weight: 600; border-bottom: 2px solid #e9ecef; padding-bottom: 8px;">📋 Order Information</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" style="background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6; margin-bottom: 25px;">
+                          <tr>
+                            <td style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6;">Order ID:</td>
+                            <td style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6; font-family: monospace;">${order.orderId}</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6;">Date:</td>
+                            <td style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6;">${new Date(order.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                          </tr>
+                          <tr>
+                            <td style="padding: 12px 15px; font-weight: 600; color: #495057;">Payment Method:</td>
+                            <td style="padding: 12px 15px; color: #212529;">PhonePe Payment Gateway</td>
+                          </tr>
+                        </table>
+                        
+                        <!-- Items list -->
+                        <h3 style="color: #2c3e50; margin: 25px 0 15px 0; font-size: 18px; font-weight: 600; border-bottom: 2px solid #e9ecef; padding-bottom: 8px;">📦 Ordered Items</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; margin-bottom: 25px;">
+                          <thead>
+                            <tr style="background-color: #f8f9fa;">
+                              <th align="left" style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6;">Item</th>
+                              <th align="center" style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6; width: 80px;">Qty</th>
+                              <th align="right" style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6; width: 100px;">Price</th>
+                              <th align="right" style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6; width: 120px;">Total</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            ${(order.cartItems || []).map(item => `
+                              <tr>
+                                <td style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6; font-size: 14px;"><strong>${item.title || item.name}</strong>${item.hsnSacCode ? `<br><small style="color: #6c757d;">HSN/SAC: ${item.hsnSacCode}</small>` : ''}</td>
+                                <td align="center" style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6; font-size: 14px;">${item.quantity}</td>
+                                <td align="right" style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6; font-size: 14px;">₹${Math.round(item.price).toLocaleString('en-IN')}</td>
+                                <td align="right" style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6; font-size: 14px; font-weight: 600;">₹${Math.round(item.price * item.quantity).toLocaleString('en-IN')}</td>
+                              </tr>
+                            `).join('')}
+                            <tr style="background-color: #f8f9fa;">
+                              <td colspan="3" align="right" style="padding: 15px 20px; font-weight: bold; color: #2c3e50; font-size: 16px;">Grand Total:</td>
+                              <td align="right" style="padding: 15px 20px; font-weight: bold; color: #28a745; font-size: 18px;">₹${order.totalAmount.toLocaleString('en-IN')}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        
+                        <!-- Shipping info -->
+                        <h3 style="color: #2c3e50; margin: 25px 0 15px 0; font-size: 18px; font-weight: 600; border-bottom: 2px solid #e9ecef; padding-bottom: 8px;">🏠 Shipping Address</h3>
+                        <div style="background: #f8f9fa; padding: 15px 20px; border-radius: 8px; border-left: 4px solid #007bff; color: #495057; font-size: 15px; line-height: 1.6;">
+                          <strong>${order.name}</strong><br>
+                          ${order.streetAddress}<br>
+                          ${order.townCity}, ${order.state} - ${order.postcode}<br>
+                          ${order.country || 'India'}
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                      <td style="background: #2c3e50; padding: 25px; text-align: center; color: white;">
+                        <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #ecf0f1;">💧 Shivarn Technologies</h3>
+                        <p style="margin: 0 0 15px 0; font-size: 13px; color: #bdc3c7;">Leading Water Treatment & Purifier Solutions</p>
+                        <p style="margin: 0; font-size: 14px; color: #ecf0f1;">📞 (+91) 99780 70593 | 📧 info@shivarn.in</p>
+                      </td>
+                    </tr>
+                    
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
         `,
       });
       console.log('✅ Customer email sent:', customerEmailResult.messageId);
 
       // Admin email
       const adminEmailResult = await transporter.sendMail({
-        from: process.env.MAIL_FROM_ADDRESS,
+        from: `"${process.env.MAIL_FROM_NAME || 'Shivarn Technologies'}" <${process.env.MAIL_FROM_ADDRESS}>`,
         to: process.env.MAIL_FROM_ADDRESS,
         subject: `🎉 New Order Received - ${order.orderId} | ₹${order.totalAmount.toLocaleString()}`,
         html: `
@@ -162,7 +253,6 @@ const handlePaymentSuccess = async (req, res) => {
                     <!-- Header -->
                     <tr>
                       <td style="background: linear-gradient(135deg, #0056b3 0%, #00b7ff 100%); padding: 40px 30px; text-align: center; position: relative;">
-                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="80" cy="80" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="40" cy="60" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>'); opacity: 0.3;"></div>
                         <h1 style="color: white; margin: 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3); position: relative; z-index: 1;">🎉 New Order Alert!</h1>
                         <p style="color: white; margin: 15px 0 0 0; font-size: 18px; opacity: 0.95; position: relative; z-index: 1;">Shivarn Technologies</p>
                         <div style="background: rgba(255,255,255,0.2); border-radius: 25px; padding: 8px 20px; margin: 20px auto 0; display: inline-block; position: relative; z-index: 1;">
@@ -260,6 +350,33 @@ const handlePaymentSuccess = async (req, res) => {
                             <td style="padding: 15px 20px; font-weight: 600; color: #495057;">Total Amount</td>
                             <td style="padding: 15px 20px; color: #28a745; font-weight: 700; font-size: 18px;">₹${order.totalAmount.toLocaleString()}</td>
                           </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <!-- Order Items -->
+                    <tr>
+                      <td style="padding: 0 30px 35px;">
+                        <h3 style="color: #2c3e50; margin: 0 0 20px 0; font-size: 18px; font-weight: 600;">📦 Ordered Items</h3>
+                        <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; background: white;">
+                          <thead>
+                            <tr style="background-color: #f8f9fa;">
+                              <th align="left" style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6;">Item</th>
+                              <th align="center" style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6; width: 80px;">Qty</th>
+                              <th align="right" style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6; width: 100px;">Price</th>
+                              <th align="right" style="padding: 12px 15px; font-weight: 600; color: #495057; border-bottom: 1px solid #dee2e6; width: 120px;">Total</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            ${(order.cartItems || []).map(item => `
+                              <tr>
+                                <td style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6; font-size: 14px;"><strong>${item.title || item.name}</strong>${item.hsnSacCode ? `<br><small style="color: #6c757d;">HSN/SAC: ${item.hsnSacCode}</small>` : ''}</td>
+                                <td align="center" style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6; font-size: 14px;">${item.quantity}</td>
+                                <td align="right" style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6; font-size: 14px;">₹${Math.round(item.price).toLocaleString('en-IN')}</td>
+                                <td align="right" style="padding: 12px 15px; color: #212529; border-bottom: 1px solid #dee2e6; font-size: 14px; font-weight: 600;">₹${Math.round(item.price * item.quantity).toLocaleString('en-IN')}</td>
+                              </tr>
+                            `).join('')}
+                          </tbody>
                         </table>
                       </td>
                     </tr>
